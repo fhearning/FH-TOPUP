@@ -18,8 +18,11 @@
             --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             --danger-color: #e53935;
             --success-color: #43A047;
+            --whatsapp-green: #25D366;
+            --telegram-blue: #0088CC;
+            --tiktok-black: #000000;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing:border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
@@ -35,7 +38,7 @@
         .loader-wrapper {
             position: fixed;
             top: 0;
-            left: 0;
+           left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(255, 255, 255, 0.9);
@@ -110,6 +113,1275 @@
             border: none;
             border-radius: 8px;
             background: var(--primary-gradient);
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--primary-glow);
+        }
+        .auth-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .auth-link:hover { text-decoration: underline; }
+        .auth-footer { margin-top: 20px; color: var(--light-text-color); }
+        .error-message { color: var(--danger-color); font-size: 0.9rem; margin-top: 10px; min-height: 1.2em; }
+        
+        /* SPLASH SCREEN */
+        #splash-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg-color);
+            z-index: 10000;
+        }
+        #splash-logo { font-size: 3rem; font-weight: 700; color: var(--primary-color); }
+
+        /* --- MAIN APP VIEW --- */
+        #app-view { padding-bottom: 80px; } /* Space for fixed footer nav */
+        
+        /* Header */
+        .app-header {
+            background: var(--white-color);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .app-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .wallet-balance {
+            display: flex;
+            align-items: center;
+            background: #fff8e1;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid var(--primary-color);
+        }
+        .wallet-balance svg { width: 20px; height: 20px; margin-right: 8px; fill: var(--primary-color); }
+
+        /* Notice Bar */
+        .notice-bar {
+            background: var(--primary-gradient);
+            color: var(--text-color);
+            padding: 8px 15px; /* Added horizontal padding for better visibility */
+            font-weight: 500;
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+        /* Added new rule for marquee to ensure full text is visible */
+        .notice-bar marquee {
+            white-space: nowrap; /* Ensures text stays on a single line */
+            display: block;      /* Occupies its own block for consistent behavior */
+            width: 100%;         /* Takes full available width */
+        }
+
+        /* Slider */
+        .slider-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        .slider { display: flex; transition: transform 0.5s ease-in-out; }
+        .slide { min-width: 100%; }
+        .slide img { width: 100%; display: block; aspect-ratio: 16/7; object-fit: cover; }
+
+        /* Product Section */
+        .category-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 30px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .product-card {
+            background: var(--white-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .product-card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+        .product-info { padding: 10px; }
+        .product-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .product-price {
+            background: var(--primary-gradient);
+            color: var(--text-color);
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+        .product-card.out-of-stock {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+        .product-card.out-of-stock::after {
+            content: 'Out of Stock';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* App Pages (Deposit, Account) */
+        .app-page { padding: 20px 15px; }
+        .page-title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; }
+
+        /* Deposit Page */
+        .payment-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
+        .tab-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab-link.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        .payment-info {
+            background: #fff8e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+        }
+        .payment-info p { margin-bottom: 5px; }
+        .payment-info strong { font-size: 1.1rem; }
+
+        /* Account Page */
+        .account-info {
+            background: var(--white-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        .history-list { list-style: none; }
+        .history-item {
+            background: var(--white-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .status-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-Pending { background-color: #FB8C00; } /* Amber */
+        .status-Completed { background-color: var(--success-color); } /* Green */
+        .status-Rejected { background-color: var(--danger-color); } /* Red */
+        .btn-logout { background: var(--danger-color); color: white; }
+        .btn-logout:hover { background: #d32f2f; box-shadow: 0 0 15px rgba(229, 57, 53, 0.5); }
+
+
+        /* Footer Navigation */
+        .footer-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white-color);
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+        }
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            color: var(--light-text-color);
+            transition: color 0.3s ease;
+        }
+        .nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-item .nav-text { font-size: 0.75rem; font-weight: 500; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: var(--white-color);
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 450px;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-title { font-size: 1.5rem; font-weight: 600; }
+        .modal-close { font-size: 2rem; cursor: pointer; color: var(--light-text-color); border: none; background: none; }
+        .modal-body img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; float: left; margin-right: 15px; margin-bottom: 15px; }
+        .modal-body p { margin-bottom: 5px; }
+        .modal-footer { margin-top: 20px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* NEW: Customer Service & Notice Page Styling */
+        .service-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .service-link-card {
+            background: var(--white-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+        .service-link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .service-link-card svg {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        .service-link-card.whatsapp svg { fill: var(--whatsapp-green); }
+        .service-link-card.telegram svg { fill: var(--telegram-blue); }
+        .service-link-card.tiktok svg { fill: var(--tiktok-black); }
+
+        #full-notice-display {
+            background: var(--white-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            white-space: pre-wrap; /* Preserves whitespace, including line breaks */
+            word-wrap: break-word; /* Breaks long words */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div id="splash-logo">Loading...</div>
+    </div>
+    
+    <!-- Loader -->
+    <div id="loader" class="loader-wrapper d-none">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Authentication Views -->
+    <div id="auth-view" class="d-none">
+        <!-- Login View -->
+        <div id="login-view">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h1 class="auth-title" id="login-app-name">Welcome</h1>
+                    <p class="auth-subtitle">Sign in to continue</p>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <input type="email" id="login-email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="login-password" placeholder="Password" required>
+                        </div>
+                        <div class="error-message" id="login-error"></div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <p class="auth-footer">
+                        <a href="#" class="auth-link" id="forgot-password-link">Forgot Password?</a>
+                    </p>
+                    <p class="auth-footer">
+                        Don't have an account? <a href="#" class="auth-link" id="show-signup-link">Sign Up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up View -->
+        <div id="signup-view" class="d-none">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h1 class="auth-title" id="signup-app-name">Create Account</h1>
+                    <p class="auth-subtitle">Get started with your new account</p>
+                    <form id="signup-form">
+                        <div class="form-group">
+                            <input type="email" id="signup-email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="signup-password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="signup-confirm-password" placeholder="Confirm Password" required>
+                        </div>
+                        <div class="error-message" id="signup-error"></div>
+                        <button type="submit" class="btn">Sign Up</button>
+                    </form>
+                    <p class="auth-footer">
+                        Already have an account? <a href="#" class="auth-link" id="show-login-link">Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Forgot Password View -->
+        <div id="forgot-password-view" class="d-none">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h1 class="auth-title">Reset Password</h1>
+                    <p class="auth-subtitle">Enter your email to receive a reset link</p>
+                    <form id="forgot-password-form">
+                        <div class="form-group">
+                            <input type="email" id="reset-email" placeholder="Email" required>
+                        </div>
+                        <div class="error-message" id="reset-message"></div>
+                        <button type="submit" class="btn">Send Reset Link</button>
+                    </form>
+                    <p class="auth-footer">
+                        <a href="#" class="auth-link" id="back-to-login-link">Back to Login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Application View -->
+    <div id="app-view" class="d-none">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="app-logo" id="app-name-header">App</div>
+            <div class="wallet-balance">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                <span id="wallet-balance-value">0</span>
+            </div>
+        </header>
+
+        <!-- Notice Bar -->
+        <div class="notice-bar">
+            <marquee id="notice-text">Welcome to our top-up center!</marquee>
+        </div>
+
+        <main id="main-content">
+            <!-- Home Page -->
+            <div id="home-page" class="app-page">
+                <div class="slider-container">
+                    <div class="slider" id="image-slider">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+                <div id="product-list" class="container">
+                    <!-- JS will populate this -->
+                </div>
+            </div>
+            
+            <!-- Deposit Page -->
+            <div id="deposit-page" class="app-page d-none">
+                <h1 class="page-title">Add Money</h1>
+                <div class="payment-tabs">
+                    <div class="tab-link active" data-tab="bkash">Bkash</div>
+                    <div class="tab-link" data-tab="nagad">Nagad</div>
+                    <div class="tab-link" data-tab="rocket">Rocket</div>
+                </div>
+                
+                <div id="bkash-tab" class="tab-content active">
+                    <div class="payment-info">
+                        <p>Send money to our Bkash Number:</p>
+                        <strong id="bkash-number">Loading...</strong>
+                        <p style="margin-top:10px;">Minimum deposit amount: <strong>৳ <span class="min-deposit-display">...</span></strong></p>
+                    </div>
+                    <form class="deposit-form" data-method="Bkash">
+                        <div class="form-group">
+                            <input type="number" placeholder="Amount" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Transaction ID" required>
+                        </div>
+                        <button type="submit" class="btn">Submit</button>
+                    </form>
+                </div>
+                
+                <div id="nagad-tab" class="tab-content">
+                     <div class="payment-info">
+                        <p>Send money to our Nagad Number:</p>
+                        <strong id="nagad-number">Loading...</strong>
+                        <p style="margin-top:10px;">Minimum deposit amount: <strong>৳ <span class="min-deposit-display">...</span></strong></p>
+                    </div>
+                    <form class="deposit-form" data-method="Nagad">
+                        <div class="form-group">
+                            <input type="number" placeholder="Amount" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Transaction ID" required>
+                        </div>
+                        <button type="submit" class="btn">Submit</button>
+                    </form>
+                </div>
+                
+                <div id="rocket-tab" class="tab-content">
+                     <div class="payment-info">
+                        <p>Send money to our Rocket Number:</p>
+                        <strong id="rocket-number">Loading...</strong>
+                        <p style="margin-top:10px;">Minimum deposit amount: <strong>৳ <span class="min-deposit-display">...</span></strong></p>
+                    </div>
+                    <form class="deposit-form" data-method="Rocket">
+                        <div class="form-group">
+                            <input type="number" placeholder="Amount" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Transaction ID" required>
+                        </div>
+                        <button type="submit" class="btn">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notice Page (NEW) -->
+            <div id="notice-page" class="app-page d-none">
+                <h1 class="page-title">Important Notice</h1>
+                <div id="full-notice-display">
+                    <!-- Full notice text will be loaded here by JS -->
+                    <p>Loading notice...</p>
+                </div>
+            </div>
+
+            <!-- Customer Service Page (NEW) -->
+            <div id="customer-service-page" class="app-page d-none">
+                <h1 class="page-title">Customer Service</h1>
+                <div class="service-links-grid" id="customer-service-links-grid">
+                    <!-- Customer service links will be populated here by JS -->
+                    <p style="text-align: center; color: var(--light-text-color);">Loading customer service links...</p>
+                </div>
+            </div>
+
+            <!-- Account Page -->
+            <div id="account-page" class="app-page d-none">
+                <h1 class="page-title">My Account</h1>
+                <div class="account-info">
+                    <p><strong>Email:</strong> <span id="user-email-display"></span></p>
+                </div>
+
+                <h2>My Orders</h2>
+                <ul id="order-history-list" class="history-list">
+                    <!-- JS populates this -->
+                </ul>
+
+                <h2 style="margin-top: 20px;">Deposit History</h2>
+                <ul id="deposit-history-list" class="history-list">
+                   <!-- JS populates this -->
+                </ul>
+
+                <button id="logout-btn" class="btn btn-logout" style="margin-top: 30px;">Logout</button>
+            </div>
+        </main>
+
+        <!-- Footer Navigation -->
+        <nav class="footer-nav">
+            <div class="nav-item active" data-page="home-page">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <div class="nav-text">Home</div>
+            </div>
+            <div class="nav-item" data-page="deposit-page">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                <div class="nav-text">Add Money</div>
+            </div>
+            <div class="nav-item" data-page="notice-page">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm-.01-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+                <div class="nav-text">Notice</div>
+            </div>
+            <div class="nav-item" data-page="customer-service-page">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                <div class="nav-text">Service</div>
+            </div>
+            <div class="nav-item" data-page="account-page">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <div class="nav-text">Account</div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirm Order</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="order-modal-body">
+                <!-- JS populates this -->
+            </div>
+            <div class="modal-footer">
+                <form id="order-form">
+                    <div class="form-group">
+                        <input type="text" id="player-id" placeholder="Enter Your Player ID" required>
+                    </div>
+                    <button type="submit" class="btn">Confirm Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- FIREBASE CONFIGURATION ---
+            const firebaseConfig = {
+                apiKey: "AIzaSyCkCPGxDwu7HQWGzFtwCbKGvN51leEkvX8",
+                authDomain: "fh-topup.firebaseapp.com",
+                projectId: "fh-topup",
+                storageBucket: "fh-topup.firebasestorage.app",
+                messagingSenderId: "862808824741",
+                appId: "1:862808824741:web:9f2741f6c0ee75bd62264c",
+                measurementId: "G-GNC8R42T7P"
+            };
+            
+            // --- INITIALIZE FIREBASE ---
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            // --- GLOBAL STATE ---
+            let currentUser = null;
+            let currentProduct = null;
+            let globalSettings = {}; // To store settings like min deposit
+            let userDocUnsubscribe = null; // To store the unsubscribe function for user doc listener
+            let isUserAuthenticating = false; // Flag to prevent re-triggering auth logic
+            let hasInitialDataLoaded = false; // Flag to ensure app data loads only once per session
+            
+            // --- UI ELEMENT SELECTORS ---
+            const splashScreen = document.getElementById('splash-screen');
+            const splashLogo = document.getElementById('splash-logo');
+            const loader = document.getElementById('loader');
+            const authView = document.getElementById('auth-view');
+            const appView = document.getElementById('app-view');
+            const mainContent = document.getElementById('main-content');
+            
+            // --- UTILITY FUNCTIONS ---
+            const showLoader = () => {
+                // console.log("Showing loader...");
+                loader.classList.remove('d-none');
+            };
+            const hideLoader = () => {
+                // console.log("Hiding loader...");
+                loader.classList.add('d-none');
+            };
+            const showAlert = (message, type = 'success') => {
+                // console.log(`Alert (${type}): ${message}`);
+                alert(message); // Simple alert, can be replaced with a custom modal
+            };
+
+            // --- VIEW/PAGE SWITCHING LOGIC ---
+            function showAuthSubView(viewId) {
+                // console.log("Showing auth sub-view:", viewId);
+                ['login-view', 'signup-view', 'forgot-password-view'].forEach(id => {
+                    document.getElementById(id).classList.add('d-none');
+                });
+                document.getElementById(viewId).classList.remove('d-none');
+            }
+
+            function switchAppPage(pageId) {
+                // console.log("Switching app page to:", pageId);
+                mainContent.querySelectorAll('.app-page').forEach(page => page.classList.add('d-none'));
+                document.getElementById(pageId).classList.remove('d-none');
+                document.querySelectorAll('.footer-nav .nav-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.page === pageId);
+                });
+                
+                // If switching to Notice or Customer Service page, render their content
+                if (pageId === 'notice-page') {
+                    renderNoticePage();
+                } else if (pageId === 'customer-service-page') {
+                    renderCustomerServicePage();
+                }
+            }
+
+            // --- AUTHENTICATION ---
+            auth.onAuthStateChanged(async (user) => {
+                // console.log("onAuthStateChanged triggered. User:", user ? user.uid : "null", "isUserAuthenticating:", isUserAuthenticating);
+                
+                if (isUserAuthenticating) {
+                    // console.log("Authentication flow in progress, skipping re-trigger.");
+                    return; // Prevent re-triggering during an active auth flow
+                }
+
+                if (user) {
+                    currentUser = user;
+                    isUserAuthenticating = true; // Set flag
+                    // console.log("User logged in, starting Firestore user document listener.");
+
+                    try {
+                        // Unsubscribe previous listener if any, to avoid memory leaks
+                        if (userDocUnsubscribe) {
+                            userDocUnsubscribe();
+                            userDocUnsubscribe = null; // Clear it
+                        }
+                        
+                        // Start listening to the user's document for ban status and other basic info
+                        userDocUnsubscribe = db.collection('users').doc(user.uid).onSnapshot(async (doc) => {
+                            // console.log("User doc snapshot received. Exists:", doc.exists, "User UID:", user.uid);
+                            
+                            if (!doc.exists) {
+                                console.error("User document does not exist for UID:", user.uid);
+                                // This is the core issue: if doc doesn't exist, it means user data is missing in Firestore.
+                                // This can happen if admin deleted it, or if signup failed to create it.
+                                await auth.signOut(); // Force sign out the user
+                                showAlert('আপনার অ্যাকাউন্টে সমস্যা হয়েছে। আবার লগইন করুন।', 'error'); // "There's an issue with your account. Please log in again."
+                                return; // Stop further processing for this snapshot
+                            }
+                            
+                            const userData = doc.data();
+                            if (userData.isBanned) {
+                                // console.log("User is banned, signing out.");
+                                if (currentUser) { // Only sign out if currently logged in, to avoid infinite loop
+                                    await auth.signOut();
+                                    showAlert('আপনাকে এই অ্যাপ্লিকেশন ব্যবহার থেকে নিষিদ্ধ করা হয়েছে।', 'error'); // "You have been banned from using this application."
+                                }
+                                return; // Stop further processing
+                            }
+
+                            // If user exists and is not banned, proceed to app initialization IF NOT ALREADY INITIALIZED
+                            if (!hasInitialDataLoaded) {
+                                // console.log("User is valid and app data not loaded. Initializing app.");
+                                authView.classList.add('d-none');
+                                appView.classList.remove('d-none');
+                                await initializeApp(); // Initialize app content (settings, products, initial page)
+                                hasInitialDataLoaded = true; // Set flag to true after initial load
+                            } else {
+                                // console.log("App already initialized, updating real-time data.");
+                                authView.classList.add('d-none');
+                                appView.classList.remove('d-none');
+                            }
+                            
+                            // Always update wallet balance and email for real-time updates from this listener
+                            document.getElementById('wallet-balance-value').textContent = `৳ ${userData.walletBalance.toFixed(2)}`;
+                            document.getElementById('user-email-display').textContent = userData.email;
+                            
+                            // Also listen to orders and deposits once app is visible
+                            listenToUserData();
+
+                        }, async (error) => {
+                            console.error("Error listening to user document (ban status/wallet):", error);
+                            // On error fetching user doc, better to log out for security
+                            if (currentUser) {
+                                await auth.signOut();
+                                showAlert('অ্যাকাউন্ট যাচাইকরণে একটি ত্রুটি হয়েছে। আবার চেষ্টা করুন।', 'error'); // "An error occurred during account verification. Please try again."
+                            }
+                        });
+
+                    } catch (error) {
+                        console.error("Critical error in onAuthStateChanged user document check:", error);
+                        // If any initial Firestore operation fails, log out
+                        if (currentUser) {
+                            await auth.signOut();
+                            showAlert('অ্যাকাউন্ট যাচাইকরণে একটি গুরুতর ত্রুটি হয়েছে। আবার চেষ্টা করুন।', 'error'); // "A critical error occurred during account verification. Please try again."
+                        }
+                    } finally {
+                        isUserAuthenticating = false; // Reset flag after initial auth process
+                        splashScreen.classList.add('d-none'); // Ensure splash screen is hidden
+                    }
+                } else {
+                    // User is logged out
+                    currentUser = null;
+                    hasInitialDataLoaded = false; // Reset flag when logged out
+                    if (userDocUnsubscribe) {
+                        userDocUnsubscribe(); // Stop listening to user doc when logged out
+                        userDocUnsubscribe = null;
+                    }
+                    authView.classList.remove('d-none');
+                    appView.classList.add('d-none');
+                    showAuthSubView('login-view'); // Show login view by default
+                    splashScreen.classList.add('d-none'); // Ensure splash screen is hidden
+                    isUserAuthenticating = false; // Reset flag
+                    // console.log("User logged out.");
+                }
+            });
+
+            // Login Form Submission
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                showLoader();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                const errorEl = document.getElementById('login-error');
+                errorEl.textContent = ''; // Clear previous errors
+
+                try {
+                    // Set persistence for user login
+                    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                    await auth.signInWithEmailAndPassword(email, password);
+                    // onAuthStateChanged will handle the rest (user doc check, ban status, app init)
+                    // console.log("Login successful. onAuthStateChanged will handle app state.");
+                } catch (error) {
+                    errorEl.textContent = error.message;
+                    console.error("Login failed:", error);
+                } finally {
+                    hideLoader(); // Ensure loader is always hidden
+                }
+            });
+
+            // Signup Form Submission (Improved for Firestore document creation)
+            document.getElementById('signup-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                showLoader();
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+                const errorEl = document.getElementById('signup-error');
+                errorEl.textContent = ''; // Clear previous errors
+
+                if (password !== confirmPassword) {
+                    errorEl.textContent = "Passwords do not match.";
+                    hideLoader();
+                    return;
+                }
+                
+                try {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                    // console.log("Firebase Auth user created:", userCredential.user.uid);
+
+                    // Ensure the user's data is set in Firestore immediately after auth creation
+                    await db.collection('users').doc(userCredential.user.uid).set({
+                        email: userCredential.user.email,
+                        walletBalance: 0,
+                        isBanned: false // New users are not banned by default
+                    });
+                    // console.log("User document created in Firestore for UID:", userCredential.user.uid);
+                    showAlert('Account created successfully! Please login.', 'success');
+                    showAuthSubView('login-view'); // Redirect to login after successful signup
+                } catch (error) {
+                    errorEl.textContent = error.message;
+                    console.error("Signup failed:", error);
+                    // If Firestore doc creation fails after auth user created, consider logging out the auth user
+                    // to prevent orphan auth accounts, or providing admin tools to fix.
+                    if (auth.currentUser) {
+                        await auth.signOut(); // Log out partially created user
+                    }
+                } finally {
+                    hideLoader();
+                }
+            });
+
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', async () => {
+                showLoader();
+                try {
+                    await auth.signOut();
+                    // onAuthStateChanged will handle hiding app and showing auth view
+                    // console.log("User signed out.");
+                } catch (error) {
+                    console.error("Error during logout:", error);
+                    showAlert('Logout failed. Please try again.', 'error');
+                } finally {
+                    hideLoader();
+                }
+            });
+
+            // Forgot Password
+            document.getElementById('forgot-password-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                showLoader();
+                const email = document.getElementById('reset-email').value;
+                const messageEl = document.getElementById('reset-message');
+                messageEl.textContent = ''; // Clear previous messages
+                messageEl.style.color = ''; // Reset color
+
+                try {
+                    await auth.sendPasswordResetEmail(email);
+                    messageEl.style.color = 'var(--success-color)';
+                    messageEl.textContent = 'Password reset email sent! Check your inbox.';
+                    // console.log("Password reset email sent to:", email);
+                } catch (error) {
+                    messageEl.style.color = 'var(--danger-color)';
+                    messageEl.textContent = error.message;
+                    console.error("Password reset failed:", error);
+                } finally {
+                    hideLoader();
+                }
+            });
+
+            // Auth View Navigation Links
+            document.getElementById('show-signup-link').addEventListener('click', (e) => { e.preventDefault(); showAuthSubView('signup-view'); });
+            document.getElementById('show-login-link').addEventListener('click', (e) => { e.preventDefault(); showAuthSubView('login-view'); });
+            document.getElementById('forgot-password-link').addEventListener('click', (e) => { e.preventDefault(); showAuthSubView('forgot-password-view'); });
+            document.getElementById('back-to-login-link').addEventListener('click', (e) => { e.preventDefault(); showAuthSubView('login-view'); });
+            
+            // --- FIRESTORE DATA & APP LOGIC ---
+            async function initializeApp() {
+                // console.log("initializeApp started.");
+                showLoader();
+                await loadSettings();
+                await loadProducts();
+                // listenToUserData() is now called by the onAuthStateChanged's onSnapshot listener itself
+                switchAppPage('home-page');
+                hideLoader();
+                // console.log("initializeApp finished.");
+            }
+
+            // Load Global Settings
+            async function loadSettings() {
+                // console.log("Loading global settings...");
+                try {
+                    const doc = await db.collection('settings').doc('global').get();
+                    if (doc.exists) {
+                        const settings = doc.data();
+                        globalSettings = settings; // Store settings globally
+                        
+                        // Update UI
+                        const appName = settings.appName || 'TopUp Center';
+                        splashLogo.textContent = appName;
+                        document.getElementById('login-app-name').textContent = appName;
+                        document.getElementById('signup-app-name').textContent = `Join ${appName}`;
+                        document.getElementById('app-name-header').textContent = appName;
+                        document.getElementById('notice-text').textContent = settings.notice || 'Welcome to our top-up center!';
+
+                        // Slider (Changed to support up to 5 sliders)
+                        const slider = document.getElementById('image-slider');
+                        slider.innerHTML = '';
+                        const sliderUrls = [];
+                        for (let i = 1; i <= 5; i++) { // এখন ৫টা স্লাইডার পর্যন্ত সাপোর্ট করবে
+                            const urlKey = `slider_url_${i}`;
+                            if (settings[urlKey]) {
+                                sliderUrls.push(settings[urlKey]);
+                            }
+                        }
+
+                        if (sliderUrls.length > 0) {
+                             sliderUrls.forEach((url, index) => {
+                                slider.innerHTML += `<div class="slide"><img src="${url}" alt="Banner ${index + 1}"></div>`;
+                            });
+                            initSlider();
+                        } else {
+                            slider.innerHTML = '<div class="slide"><img src="https://via.placeholder.com/1200x500?text=No+Banners+Available" alt="No Banner"></div>';
+                        }
+                       
+                        // Payment numbers
+                        document.getElementById('bkash-number').textContent = settings.payment_numbers?.bkash || 'Not available';
+                        document.getElementById('nagad-number').textContent = settings.payment_numbers?.nagad || 'Not available';
+                        document.getElementById('rocket-number').textContent = settings.payment_numbers?.rocket || 'Not available';
+                        
+                        // Update Minimum Deposit Display
+                        const minDeposit = settings.minDepositAmount || 0;
+                        document.querySelectorAll('.min-deposit-display').forEach(el => {
+                            el.textContent = minDeposit;
+                        });
+                        // console.log("Settings loaded:", settings);
+
+                    } else {
+                        console.log("No settings document found in Firestore!");
+                    }
+                } catch (error) {
+                    console.error("Error loading settings: ", error);
+                }
+            }
+
+            // Load Products
+            async function loadProducts() {
+                // console.log("Loading products...");
+                try {
+                    const snapshot = await db.collection('products').orderBy('price').get();
+                    const products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    
+                    const productsByCategory = products.reduce((acc, product) => {
+                        (acc[product.category] = acc[product.category] || []).push(product);
+                        return acc;
+                    }, {});
+
+                    const productListEl = document.getElementById('product-list');
+                    productListEl.innerHTML = '';
+                    for (const category in productsByCategory) {
+                        productListEl.innerHTML += `<h2 class="category-title">${category}</h2>`;
+                        const grid = document.createElement('div');
+                        grid.className = 'product-grid';
+                        productsByCategory[category].forEach(product => {
+                            const isOutOfStock = product.status === 'Out of Stock';
+                            grid.innerHTML += `
+                                <div class="product-card ${isOutOfStock ? 'out-of-stock' : ''}" 
+                                     data-product-id="${product.id}" 
+                                     data-product-name="${product.name}" 
+                                     data-product-price="${product.price}" 
+                                     data-product-image="${product.imageUrl}">
+                                    <img src="${product.imageUrl}" alt="${product.name}">
+                                    <div class="product-info">
+                                        <div class="product-name">${product.name}</div>
+                                        <div class="product-price">৳ ${product.price}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        productListEl.appendChild(grid);
+                    }
+                    // console.log("Products loaded.");
+                } catch (error) {
+                    console.error("Error loading products: ", error);
+                }
+            }
+            
+            // Listen to User Data (Orders, Deposits) - Wallet balance is handled in onAuthStateChanged
+            function listenToUserData() {
+                if (!currentUser) {
+                    // console.log("listenToUserData: No current user, skipping listeners.");
+                    return;
+                }
+                // console.log("Listening to user orders and deposits for UID:", currentUser.uid);
+
+                // Orders
+                db.collection('users').doc(currentUser.uid).collection('orders').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+                    const orderListEl = document.getElementById('order-history-list');
+                    orderListEl.innerHTML = '';
+                    if (snapshot.empty) {
+                        orderListEl.innerHTML = '<li>No orders yet.</li>';
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        const order = doc.data();
+                        orderListEl.innerHTML += `<li class="history-item"><div><strong>${order.productName}</strong><br><small>ID: ${order.playerID} | ৳ ${order.price}</small></div><span class="status"><span class="status-dot status-${order.status}"></span>${order.status}</span></li>`;
+                    });
+                    // console.log("Orders updated.");
+                }, error => {
+                    console.error("Error fetching user orders:", error);
+                    document.getElementById('order-history-list').innerHTML = '<li>Error loading orders.</li>';
+                });
+
+                // Deposits
+                db.collection('users').doc(currentUser.uid).collection('deposits').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+                    const depositListEl = document.getElementById('deposit-history-list');
+                    depositListEl.innerHTML = '';
+                    if (snapshot.empty) {
+                        depositListEl.innerHTML = '<li>No deposits yet.</li>';
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        const deposit = doc.data();
+                        depositListEl.innerHTML += `<li class="history-item"><div><strong>${deposit.method} - ৳ ${deposit.amount}</strong><br><small>TnxID: ${deposit.transactionId}</small></div><span class="status"><span class="status-dot status-${deposit.status}"></span>${deposit.status}</span></li>`;
+                    });
+                    // console.log("Deposits updated.");
+                }, error => {
+                    console.error("Error fetching user deposits:", error);
+                    document.getElementById('deposit-history-list').innerHTML = '<li>Error loading deposits.</li>';
+                });
+            }
+            
+            // --- INTERACTIONS ---
+
+            // Footer Navigation
+            document.querySelector('.footer-nav').addEventListener('click', (e) => {
+                const navItem = e.target.closest('.nav-item');
+                if (navItem) {
+                    switchAppPage(navItem.dataset.page);
+                }
+            });
+
+            // Deposit Tabs
+            document.querySelector('.payment-tabs').addEventListener('click', (e) => { const tabLink = e.target.closest('.tab-link'); if (tabLink) { const tabId = tabLink.dataset.tab; document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active')); tabLink.classList.add('active'); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.getElementById(`${tabId}-tab`).classList.add('active'); } });
+            
+            // Deposit Form Submission
+            document.querySelectorAll('.deposit-form').forEach(form => {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    showLoader();
+                    const amountInput = e.target.querySelector('input[type="number"]');
+                    const transactionIdInput = e.target.querySelector('input[type="text"]');
+                    const amount = parseFloat(amountInput.value);
+                    const transactionId = transactionIdInput.value.trim();
+                    const method = e.target.dataset.method;
+
+                    // ** NEW: Minimum Deposit Check **
+                    const minDepositAmount = globalSettings.minDepositAmount || 0;
+                    if (isNaN(amount) || amount <= 0) {
+                        showAlert('Please enter a valid amount.', 'error');
+                        hideLoader();
+                        return;
+                    }
+                    if (amount < minDepositAmount) {
+                        showAlert(`Minimum deposit amount is ৳${minDepositAmount}.`, 'error');
+                        hideLoader();
+                        return;
+                    }
+                    if (!transactionId) {
+                        showAlert('Please enter a Transaction ID.', 'error');
+                        hideLoader();
+                        return;
+                    }
+
+                    const depositData = {
+                        uid: currentUser.uid,
+                        userEmail: currentUser.email,
+                        amount: amount,
+                        method: method,
+                        transactionId: transactionId,
+                        status: 'Pending',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    try {
+                        const topLevelDocRef = db.collection('deposits').doc();
+                        const userSubDocRef = db.collection('users').doc(currentUser.uid).collection('deposits').doc(topLevelDocRef.id);
+                        const batch = db.batch();
+                        batch.set(topLevelDocRef, depositData); // For admin view
+                        batch.set(userSubDocRef, depositData); // For user's own history
+                        await batch.commit();
+                        showAlert('Deposit request submitted successfully!', 'success');
+                        form.reset();
+                        switchAppPage('account-page'); // Show account page to see history
+                        // console.log("Deposit request submitted:", depositData);
+                    } catch (error) {
+                        console.error("Error submitting deposit: ", error);
+                        showAlert('Failed to submit deposit request. Please try again.', 'error');
+                    } finally {
+                        hideLoader();
+                    }
+                });
+            });
+
+            // Order Modal Logic
+            const orderModal = document.getElementById('order-modal');
+            const orderModalBody = document.getElementById('order-modal-body');
+            document.getElementById('product-list').addEventListener('click', (e) => {
+                const card = e.target.closest('.product-card:not(.out-of-stock)');
+                if (card) {
+                    currentProduct = {
+                        id: card.dataset.productId,
+                        name: card.dataset.productName,
+                        price: parseFloat(card.dataset.productPrice),
+                        imageUrl: card.dataset.productImage,
+                    };
+                    orderModalBody.innerHTML = `<img src="${currentProduct.imageUrl}" alt="${currentProduct.name}"><p><strong>Product:</strong> ${currentProduct.name}</p><p><strong>Price:</strong> ৳ ${currentProduct.price}</p><div style="clear: both;"></div>`;
+                    orderModal.classList.add('active');
+                    // console.log("Product selected for order:", currentProduct);
+                }
+            });
+            orderModal.querySelector('.modal-close').addEventListener('click', () => { orderModal.classList.remove('active'); currentProduct = null; });
+            orderModal.addEventListener('click', (e) => { if (e.target === orderModal) { orderModal.classList.remove('active'); currentProduct = null; } });
+            
+            // Place Order
+            document.getElementById('order-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                showLoader();
+                const playerID = document.getElementById('player-id').value.trim();
+                if (!playerID) {
+                    showAlert('Please enter a Player ID.', 'error');
+                    hideLoader();
+                    return;
+                }
+                
+                const userRef = db.collection('users').doc(currentUser.uid);
+                
+                db.runTransaction(async (transaction) => {
+                    const userDoc = await transaction.get(userRef);
+                    if (!userDoc.exists) { throw "User document does not exist!"; }
+
+                    const currentBalance = userDoc.data().walletBalance;
+                    
+                    // ** NEW: Specific balance checks **
+                    if (currentBalance <= 0) {
+                        throw "ZERO_BALANCE";
+                    }
+                    if (currentBalance < currentProduct.price) {
+                        throw "INSUFFICIENT_BALANCE";
+                    }
+
+                    const newBalance = currentBalance - currentProduct.price;
+                    transaction.update(userRef, { walletBalance: newBalance });
+                    
+                    const orderData = {
+                        uid: currentUser.uid,
+                        userEmail: currentUser.email,
+                        playerID: playerID,
+                        productName: currentProduct.name,
+                        productId: currentProduct.id,
+                        price: currentProduct.price,
+                        status: 'Pending',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    const newOrderRef = db.collection('orders').doc(); // Top-level for admin
+                    transaction.set(newOrderRef, orderData);
+                    transaction.set(userRef.collection('orders').doc(newOrderRef.id), orderData); // For user's own history
+                    
+                }).then(() => {
+                    showAlert('Order placed successfully!', 'success');
+                    orderModal.classList.remove('active');
+                    document.getElementById('order-form').reset();
+                    // console.log("Order placed:", currentProduct.name, "for Player ID:", playerID);
+                }).catch(error => {
+                    console.error("Order transaction failed: ", error);
+                    // ** NEW: Custom error messages **
+                    let errorMessage = `Order failed: ${error.message || error}`;
+                    if (error === "ZERO_BALANCE") {
+                        errorMessage = 'আপনার ওয়ালেটে কোন টাকা নেই। দয়া করে টাকা যোগ করুন। (Your wallet has no money. Please add money.)';
+                    } else if (error === "INSUFFICIENT_BALANCE") {
+                         errorMessage = 'Insufficient balance to place this order.';
+                    } else if (error === "User document does not exist!") {
+                        errorMessage = 'User data missing. Please try logging in again.';
+                    }
+                    showAlert(errorMessage, 'error');
+                }).finally(hideLoader);
+            });
+            
+            // Simple Image Slider
+            function initSlider() {
+                const slider = document.querySelector('.slider');
+                const slides = document.querySelectorAll('.slide');
+                if (!slider || slides.length <= 1) { // 1টির বেশি স্লাইড না থাকলে বা স্লাইডার না থাকলে কাজ করবে না
+                    if (slides.length === 1) { // If only one slide, no need to slide
+                        slider.style.transform = `translateX(0%)`;
+                    }
+                    return;
+                }
+                let currentIndex = 0;
+                const totalSlides = slides.length;
+                setInterval(() => { currentIndex = (currentIndex + 1) % totalSlides; slider.style.transform = `translateX(-${currentIndex * 100}%)`; }, 3000);
+            }
+
+            // NEW: Render Notice Page Content
+            function renderNoticePage() {
+                // console.log("Rendering Notice Page.");
+                const noticeContentEl = document.getElementById('full-notice-display');
+                if (noticeContentEl) {
+                    noticeContentEl.textContent = globalSettings.fullNotice || globalSettings.notice || 'No detailed notice available.';
+                }
+            }
+
+            // NEW: Render Customer Service Page Content
+            function renderCustomerServicePage() {
+                // console.log("Rendering Customer Service Page.");
+                const csLinksGrid = document.getElementById('customer-service-links-grid');
+                if (!csLinksGrid) return;
+                
+                csLinksGrid.innerHTML = ''; // Clear previous links
+
+                const csLinks = globalSettings.customerServiceLinks || {};
+
+                // WhatsApp Link
+                if (csLinks.whatsapp && csLinks.whatsapp.trim() !== '') {
+                    csLinksGrid.innerHTML += `
+                        <a href="${csLinks.whatsapp}" target="_blank" class="service-link-card whatsapp">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.77.46 3.45 1.28 4.9L2.05 22l5-1.34c1.46.79 3.09 1.25 4.99 1.25 5.46 0 9.9-4.44 9.9-9.9S17.5 2 12.04 2zm5.63 14.5l-.23-.37c-.67-1.12-2.1-1.84-2.83-2.09l-.49-.15c-.41-.12-.8-.02-1.09.28l-.34.3c-.31.3-.59.34-.84.09l-1.63-.99c-.49-.3-.92-.68-1.28-1.14-.37-.46-.7-.95-.9-1.47l-.15-.3c-.05-.1-.08-.22-.08-.34-.01-.15.01-.26.08-.36l.16-.21c.2-.26.29-.5.29-.71s-.1-.4-.2-.55l-.23-.3c-.31-.4-.68-.82-1.04-1.2l-.24-.26c-.3-.32-.65-.47-1.02-.47-.28 0-.58.07-.84.28l-.24.23c-.32.31-.51.49-.69.75-.41.56-.6 1.13-.6 1.76 0 1.28.66 2.47 1.48 3.55l.07.09c.8 1.05 1.77 2.01 2.91 2.87 1.14.86 2.29 1.54 3.45 2.08l.1.05c.78.36 1.45.62 2.18.62.91 0 1.63-.26 2.24-.76l.32-.29c.27-.26.43-.6.43-.99 0-.4-.15-.75-.38-.99z"/></svg>
+                            <span>WhatsApp Support</span>
+                        </a>
+                    `;
+                }
+                // Telegram Link
+                if (csLinks.telegram && csLinks.telegram.trim() !== '') {
+                    csLinksGrid.innerHTML += `
+                        <a href="${csLinks.telegram}" target="_blank" class="service-link-card telegram">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.34 8.78c-.14 0-.3-.06-.5-.13l-6-2.22c-.6-.2-1.1-.37-1.48-.37-.7 0-1.07.25-1.07.61 0 .28.1.45.3.62l.24.23c.3.28.37.52.18.73-.24.26-.59.43-.88.61l-.23.14c-.06.04-.1.08-.13.12-.22.25-.45.49-.64.71-.16.2-.34.38-.5.56l-.23.23c-.3.32-.46.5-.7.5-.13 0-.25-.04-.34-.13l-.22-.22c-.17-.18-.32-.32-.42-.45-.16-.2-.33-.42-.5-.6l-.16-.18c-.18-.2-.32-.3-.5-.3-.2 0-.34.05-.48.12l-1.95.73c-.45.16-.76.27-.92.27-.22 0-.34-.07-.34-.2C4 10.74 4.54 9.38 5.76 6.82l.06-.13c.09-.2.2-.37.33-.51l.24-.26c.3-.32.55-.49.83-.49.1 0 .18.02.26.06l.34.12c.7.25 1.8.64 3.03 1.05l.07.03c.32.13.62.25.86.32l-.1.14c-.18.26-.41.56-.6.82-.24.3-.43.5-.6.5-.17 0-.28-.05-.34-.1l-.14-.14-.49-.5c-.34-.37-.59-.5-.8-.5-.22 0-.37.06-.48.13l-1.3.49c-.2.07-.37.13-.5.13-.26 0-.4-.1-.4-.28 0-.1.03-.17.07-.23l.26-.49c.12-.23.26-.45.41-.67l.06-.09c.35-.49.73-.97 1.13-1.4l.26-.35c.16-.2.29-.3.42-.3.12 0 .2.02.24.03l.3.08c.5.17 1.2.4 1.95.7l.08.03c.35.13.6.25.76.32l-.12.2c-.18.26-.3.56-.4.82-.1.25-.1.4-.1.4 0 .1.02.17.06.23l.1.13c.09.12.17.18.2.18.06 0 .1-.02.13-.03l.4-.15c.5-.2 1.1-.4 1.8-.62l.05-.02c.3-.1.55-.17.7-.22z"/></svg>
+                            <span>Telegram Group</span>
+                        </a>
+                    `;
+                }
+                // TikTok Link
+                if (csLinks.tiktok && csLinks.tiktok.trim() !== '') {
+                    csLinksGrid.innerHTML += `
+                        <a href="${csLinks.tiktok}" target="_blank" class="service-link-card tiktok">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.53 2.01a11.97 11.97 0 0 0-1.74 0c-.57.06-1.12.18-1.63.35-.6.2-1.17.46-1.69.77-.52.32-.99.69-1.42 1.12-.43.43-.8.9-1.12 1.42-.32.52-.57 1.09-.77 1.69-.18.51-.3 1.06-.35 1.63-.06.57-.09 1.13-.09 1.7h.03a11.97 11.97 0 0 0 1.74 0c.57-.06 1.12-.18 1.63-.35.6-.2 1.17-.46 1.69-.77.52-.32.99-.69 1.42-1.12.43.43.8-.9 1.12-1.42.32-.52.57-1.09.77-1.69.18-.51.3-1.06.35-1.63.06-.57.09-1.13.09-1.7h-.03zM22 12c0 5.42-4.58 9.99-10 9.99S2 17.42 2 12c0-2.48.92-4.78 2.45-6.57.01.01.01.01.01.01C3.39 6.8 2.76 8.1 2.37 9.49c-.19.66-.3 1.34-.3 2.01h.03c.06.57.18 1.12.35 1.63.2.6.46 1.17.77 1.69.32.52.69.99 1.12 1.42.43.43.9 0 1.42.01.52.01 1.09.01 1.69-.01.51-.01 1.06-.03 1.63-.09.57-.06 1.13-.09 1.7-.09h.03c.01-.01.01-.01.01-.01.89-.01 1.77-.07 2.64-.17 1.25-.15 2.43-.46 3.52-.92 1.09-.46 2.05-.98 2.87-1.55.82-.57 1.5-1.2 2.02-1.87.52-.66.9-1.38 1.13-2.14.23-.77.34-1.56.34-2.38 0-.01-.01-.01-.01-.01C19.52 4.75 16.78 2 12.53 2z"/></svg>
+                            <span>TikTok Profile</span>
+                        </a>
+                    `;
+                }
+
+                if (csLinksGrid.innerHTML === '') {
+                    csLinksGrid.innerHTML = '<p style="text-align: center; color: var(--light-text-color);">No customer service links available.</p>';
+                }
+            }
+            // All Firebase SDKs (app, auth, firestore) are imported.
+        });
+    </script>
+</body>
+</html>            background: var(--primary-gradient);
             color: var(--text-color);
             font-size: 1rem;
             font-weight: 600;
